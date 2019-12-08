@@ -1,3 +1,13 @@
+# Table of Contents
+
+- [SQL Server](#sql-server)
+  * [Install SQL Server on your machine](#install-sql-server-on-your-machine)
+- [Install SQL Server tools](#install-sql-server-tools)
+  * [Sql Server Management Studio](#sql-server-management-studio)
+  * [Azure Data Studio](#azure-data-studio)
+- [Setup the Sample Database](#setup-the-sample-database)
+  * [AdventureWorks](#adventureworks)
+
 # SQL Server
 You will need access to a SQL Server instance for this course.  There are two options for this:
 1. Install SQL Server on your machine (this option is only supported on Windows)
@@ -5,7 +15,7 @@ You will need access to a SQL Server instance for this course.  There are two op
 
 Option 1 takes a bit more work, but it is recommended because you will be able to access your SQL server at anytime.  With option 2, you will need internet access to use your server.
 
-## Install SQL Server on your machine (Recommended)
+## Install SQL Server on your machine
 1. Download SQL Server Developer from https://go.microsoft.com/fwlink/?linkid=853016
 2. Run the installer and choose the custom option
 
@@ -53,6 +63,7 @@ Option 1 takes a bit more work, but it is recommended because you will be able t
 
 ![install step 11](images/install-14.png)
 
+
 # Install SQL Server tools
 ## Sql Server Management Studio
 Sql Server Management Studio(SSMS) is a standard tool used to develop and administer Microsoft SQL Server databases.  Install and configure SSMS as follows:
@@ -65,7 +76,7 @@ Sql Server Management Studio(SSMS) is a standard tool used to develop and admini
 
 
 
-### Azure Data Studio
+## Azure Data Studio
 Azure Data Studio is a lightweight, cross-platform alternative to SSMS that is focused on SQL development.  Install and configure Azure Data Studio as follows:
 
 1. Download Azure Data Studio from https://docs.microsoft.com/en-us/sql/azure-data-studio/download?view=sql-server-ver15
@@ -74,4 +85,36 @@ Azure Data Studio is a lightweight, cross-platform alternative to SSMS that is f
 
 ![azure data studio](images/ads-1.png)
 
-# Setup the Sample Databases
+# Setup the Sample Database
+## AdventureWorks
+1. Download the backup file from https://github.com/jredwardson/intro-to-sql/raw/master/databases/AdventureWorksLT2012.bak
+2. Copy the backup file to `C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\Backup\AdventureWorksLT2012.bak`
+3. Open SSMS and connect to your server, and click New Query (or use the shortcut Ctrl-N).
+
+![ssms new query](images/ssms-new.png)
+
+4. Paste the following script into the query window:
+``` USE [master]
+RESTORE DATABASE [AdventureWorksLT2012] 
+FROM  DISK = N'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\Backup\AdventureWorksLT2012.bak' 
+WITH  FILE = 1,  
+MOVE N'AdventureWorksLT2008_Data' TO N'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\AdventureWorksLT2012_Data.mdf',  
+MOVE N'AdventureWorksLT2008_Log' TO N'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\AdventureWorksLT2012_log.ldf',  
+NOUNLOAD,  STATS = 5
+
+GO
+```
+5. Click Execute(or use the shortcut F5)  
+6. Click Refresh in the Object Explorer, then expand the Databases node.  You should see AdventureWorksLT2012 in the list.
+
+![ssms object explorer](images/ssms-aw.png)
+
+7. Test it out by right clicking on AdventureWorksLT2012 in the Object explorer, and choosing New Query.  Then paste the following script in the query editor window
+
+```
+SELECT * FROM SalesLT.Product
+```
+
+8. Click Execute(F5), and you should see the query results in bottom pane:
+
+![ssms test](images/ssms-test.png)
